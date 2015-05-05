@@ -41,22 +41,22 @@ int slot1=0,slot2=0,slot3=0;
 void setup()
 {
   size(1772/2,1417/2);
-	
-	frameRate(6);
-	imgSlot1[0] = loadImage("images/nmct.png");
-	imgSlot1[3]=loadImage("images/dae.png");
-	imgSlot1[2]=loadImage("images/devine.png");
-	imgSlot1[1]=loadImage("images/howest.png");
+  
+  frameRate(6);
+  imgSlot1[0] = loadImage("images/nmct.png");
+  imgSlot1[3]=loadImage("images/dae.png");
+  imgSlot1[2]=loadImage("images/devine.png");
+  imgSlot1[1]=loadImage("images/howest.png");
 
-	imgSlot2[3] = loadImage("images/nmct.png");
-	imgSlot2[1]=loadImage("images/dae.png");
-	imgSlot2[2]=loadImage("images/devine.png");
-	imgSlot2[0]=loadImage("images/howest.png");
+  imgSlot2[3] = loadImage("images/nmct.png");
+  imgSlot2[1]=loadImage("images/dae.png");
+  imgSlot2[2]=loadImage("images/devine.png");
+  imgSlot2[0]=loadImage("images/howest.png");
 
-	imgSlot3[2] = loadImage("images/nmct.png");
-	imgSlot3[3]=loadImage("images/dae.png");
-	imgSlot3[0]=loadImage("images/devine.png");
-	imgSlot3[1]=loadImage("images/howest.png");
+  imgSlot3[2] = loadImage("images/nmct.png");
+  imgSlot3[3]=loadImage("images/dae.png");
+  imgSlot3[0]=loadImage("images/devine.png");
+  imgSlot3[1]=loadImage("images/howest.png");
 
   leap = new LeapMotionP5(this);
   handPositieLijst = new ArrayList<PVector>();
@@ -65,24 +65,24 @@ void setup()
   imgSlotmachineLeverDown = loadImage("images/Slotmachine-leverDown.png");
 
 
-	/*slotColumn1[0]=imgSlot1;
-	slotColumn1[1]=imgSlot1;
-	slotColumn1[2]=imgSlot1;
+  /*slotColumn1[0]=imgSlot1;
+  slotColumn1[1]=imgSlot1;
+  slotColumn1[2]=imgSlot1;
 
-	slotColumn2[0]=imgSlot1;
-	slotColumn2[1]=imgSlot1;
-	slotColumn2[2]=imgSlot1;
+  slotColumn2[0]=imgSlot1;
+  slotColumn2[1]=imgSlot1;
+  slotColumn2[2]=imgSlot1;
 
-	slotColumn2[0]=imgSlot1;
-	slotColumn2[1]=imgSlot1;
-	slotColumn2[2]=imgSlot1;*/
-	
+  slotColumn2[0]=imgSlot1;
+  slotColumn2[1]=imgSlot1;
+  slotColumn2[2]=imgSlot1;*/
+  
 
 }
 
 void draw()
 {
-	
+  
   if(gameStatus == "INIT")
   {
      background(50);
@@ -105,7 +105,7 @@ void draw()
   }
 
   if(gameStatus == "START")
-	{
+  {
      HendelControle();
 }
 
@@ -121,11 +121,11 @@ if(gameStatus == "PULLED")
   }
 
 if(gameStatus == "BEZIG") {
-	if(timer == false)
-	{
+  if(timer == false)
+  {
     background(50);
     image(imgSlotMachine,0,0,1772/2,1417/2);
-	}
+  }
   else
   {
     background(50);
@@ -135,10 +135,10 @@ if(gameStatus == "BEZIG") {
 
   HitControle();
   keyPressed();
-	
-	checkSlot1();
- 	checkSlot2();
- 	checkSlot3();
+  
+  checkSlot1();
+  checkSlot2();
+  checkSlot3();
 
   
 
@@ -263,93 +263,93 @@ void CheckFinished()
 
 void checkSlot1()
 {
-	if(slot1==0){
-  	 image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
-  	 image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
-  	 image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
-  	 pos1_1++; 
-  	 pos1_2++;
-  	 pos1_3++;
+  if(slot1==0){
+     image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
+     image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
+     image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
+     pos1_1++; 
+     pos1_2++;
+     pos1_3++;
 
-  	 if (pos1_1 > 3) {
+     if (pos1_1 > 3) {
     pos1_1 = 0;
   } 
   if(pos1_2 >3)
   {
-  	pos1_2=0;
+    pos1_2=0;
 
   }
   if(pos1_3 >3){
-  	pos1_3=0;
+    pos1_3=0;
   }
 
 }
   else{
-  	 	  image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
-  	 image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
-  	 image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
+        image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
+     image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
+     image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
   }
 
 }
 
 void checkSlot2()
 {
-	if(slot2==0){
-  	 image(slotColumn2[0][pos2_1],185+210, 192+97.5,70,97.5 );
-  	 image(slotColumn2[1][pos2_2], 185+210, 290+97.5,70,97.5);
-  	 image(slotColumn2[2][pos2_3], 185+210, 290+97.5+97.5,70,97.5);
-  	 pos2_1++; 
-  	 pos2_2++;
-  	 pos2_3++;
+  if(slot2==0){
+     image(slotColumn2[0][pos2_1],185+210, 192+97.5,70,97.5 );
+     image(slotColumn2[1][pos2_2], 185+210, 290+97.5,70,97.5);
+     image(slotColumn2[2][pos2_3], 185+210, 290+97.5+97.5,70,97.5);
+     pos2_1++; 
+     pos2_2++;
+     pos2_3++;
 
-  	 if (pos2_1 > 3) {
+     if (pos2_1 > 3) {
     pos2_1 = 0;
   } 
   if(pos2_2 >3)
   {
-  	pos2_2=0;
+    pos2_2=0;
 
   }
   if(pos2_3 >3){
-  	pos2_3=0;
+    pos2_3=0;
   }
 
 }
   else{
-  	 image(slotColumn2[0][pos2_1],185+210, 192+97.5,70,97.5 );
-  	 image(slotColumn2[1][pos2_2], 185+210, 290+97.5,70,97.5);
-  	 image(slotColumn2[2][pos2_3], 185+210, 290+97.5+97.5,70,97.5);
+     image(slotColumn2[0][pos2_1],185+210, 192+97.5,70,97.5 );
+     image(slotColumn2[1][pos2_2], 185+210, 290+97.5,70,97.5);
+     image(slotColumn2[2][pos2_3], 185+210, 290+97.5+97.5,70,97.5);
   }
-	
+  
 
 }
 
 void checkSlot3()
 {
-	if(slot3==0){
-  	image(slotColumn3[0][pos3_1],185+410, 192+97.5,70,97.5 );
-  	 image(slotColumn3[1][pos3_2], 185+410, 290+97.5,70,97.5);
-  	 image(slotColumn3[2][pos3_3], 185+410, 290+97.5+97.5,70,97.5);
-  	 pos3_1++; 
-  	 pos3_2++;
-  	 pos3_3++;
+  if(slot3==0){
+    image(slotColumn3[0][pos3_1],185+410, 192+97.5,70,97.5 );
+     image(slotColumn3[1][pos3_2], 185+410, 290+97.5,70,97.5);
+     image(slotColumn3[2][pos3_3], 185+410, 290+97.5+97.5,70,97.5);
+     pos3_1++; 
+     pos3_2++;
+     pos3_3++;
 
-  	 if (pos3_1 > 3) {
+     if (pos3_1 > 3) {
     pos3_1 = 0;
   } 
   if(pos3_2 >3)
   {
-  	pos3_2=0;
+    pos3_2=0;
 
   }
   if(pos3_3 >3){
-  	pos3_3=0;
+    pos3_3=0;
   }
 
 }
   else{
-  	image(slotColumn3[0][pos3_1],185+410, 192+97.5,70,97.5 );
-  	 image(slotColumn3[1][pos3_2], 185+410, 290+97.5,70,97.5);
-  	 image(slotColumn3[2][pos3_3], 185+410, 290+97.5+97.5,70,97.5);
+    image(slotColumn3[0][pos3_1],185+410, 192+97.5,70,97.5 );
+     image(slotColumn3[1][pos3_2], 185+410, 290+97.5,70,97.5);
+     image(slotColumn3[2][pos3_3], 185+410, 290+97.5+97.5,70,97.5);
   }
 }
