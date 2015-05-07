@@ -45,13 +45,13 @@ int pos1_1 =0;
 int pos1_2=1;
 int pos1_3=2;
 
-int pos2_1=0;
-int pos2_2=1;
-int pos2_3=2;
+int pos2_1=1;
+int pos2_2=2;
+int pos2_3=0;
 
-int pos3_1=0;
-int pos3_2=1;
-int pos3_3=2;
+int pos3_1=2;
+int pos3_2=0;
+int pos3_3=1;
 int slot1=0,slot2=0,slot3=0;
 int credit=100;
 
