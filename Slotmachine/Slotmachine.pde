@@ -106,6 +106,7 @@ void draw()
 
   if(gameStatus == "START")
   {
+    println("Gamestatus = " + gamestatus);
      HendelControle();
      
 }
@@ -146,10 +147,13 @@ if(gameStatus == "BEZIG") {
 
 }
 if(gameStatus=="HIT"){
-  println("gamestatus=HIT");
+  println("Gamestatus = " + gamestatus);
 
   HitControle();
-  
+  TijdControle();
+
+  if(timer = false)
+    gamestatus = "START";
 
 
 }
@@ -175,6 +179,7 @@ void HendelControle(){
 
     if(handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y && handPositieLijst.get(0).z+100 < handPositieLijst.get(lijstSize-1).z)
       {
+        totalTime = 500;
         gameStatus = "PULLED";
         handPositieLijst.clear();
       }
@@ -303,7 +308,11 @@ void CheckFinished()
     pos3_2=3;
     pos3_3=0;*/
 
-    handPositieLijst.clear(); gameStatus="HIT";
+    handPositieLijst.clear();
+    
+    totalTime = 5000; timer = true; startTime = millis();
+
+    gameStatus="HIT";
     
   }
 
