@@ -23,6 +23,8 @@ String gameStatus = "INIT";
 int lastSlotStopped=0;
 boolean hitcheat = false;
 
+PImage imgStrawberry = new PImage();
+
 
 int pos1_1 = 0;
 int pos1_2=1;
@@ -49,6 +51,8 @@ void setup()
   imgSlot1[2]=loadImage("images/devine.png");
   imgSlot1[3]=loadImage("images/howest.png");
   imgCredit=loadImage("images/bitcoin.png");
+
+  imgStrawberry = loadImage("images/strawberry.png");
 
   leap = new LeapMotionP5(this);
   handPositieLijst = new ArrayList<PVector>();
