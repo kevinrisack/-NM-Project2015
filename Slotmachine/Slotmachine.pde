@@ -30,10 +30,10 @@ int pos1_3=2;
 
 int pos2_1=2;
 int pos2_2=3;
-int pos2_3=1;
+int pos2_3=0;
 
-int pos3_1=0;
-int pos3_2=2;
+int pos3_1=3;
+int pos3_2=0;
 int pos3_3=1;
 int slot1=0,slot2=0,slot3=0;
 
@@ -194,7 +194,7 @@ void HitControle(){
 
     int lijstSize = handPositieLijst2.size();
 
-    if(handPositieLijst2.get(0).x-300 > handPositieLijst2.get(lijstSize-1).x)
+    if(handPositieLijst2.get(0).x+300 < handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot1 slipped");
 
@@ -230,7 +230,7 @@ void HitControle(){
          
     }
 
-   else if(handPositieLijst2.get(0).x+300 < handPositieLijst2.get(lijstSize-1).x)
+   else if(handPositieLijst2.get(0).x-300 > handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot3 slipped");
       slot3=0;
@@ -311,20 +311,20 @@ void checkSlot1()
      image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
      image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
      image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
-     pos1_1++; 
-     pos1_2++;
-     pos1_3++;
+     pos1_1--; 
+     pos1_2--;
+     pos1_3--;
 
-     if (pos1_1 > 3) {
-    pos1_1 = 0;
+     if (pos1_1 <0) {
+    pos1_1 = 3;
   } 
-  if(pos1_2 >3)
+  if(pos1_2 <0)
   {
-    pos1_2=0;
+    pos1_2=3;
 
   }
-  if(pos1_3 >3){
-    pos1_3=0;
+  if(pos1_3 <0){
+    pos1_3=3;
   }
 
 }
@@ -342,20 +342,20 @@ void checkSlot2()
      image(slotColumn2[0][pos2_1],185+210, 192+97.5,70,97.5 );
      image(slotColumn2[1][pos2_2], 185+210, 290+97.5,70,97.5);
      image(slotColumn2[2][pos2_3], 185+210, 290+97.5+97.5,70,97.5);
-     pos2_1++; 
-     pos2_2++;
-     pos2_3++;
+     pos2_1--; 
+     pos2_2--;
+     pos2_3--;
 
-     if (pos2_1 > 3) {
-    pos2_1 = 0;
+     if (pos2_1 <0) {
+    pos2_1 = 3;
   } 
-  if(pos2_2 >3)
+  if(pos2_2 <0)
   {
-    pos2_2=0;
+    pos2_2=3;
 
   }
-  if(pos2_3 >3){
-    pos2_3=0;
+  if(pos2_3 <0){
+    pos2_3=3;
   }
 
 }
@@ -374,20 +374,20 @@ void checkSlot3()
     image(slotColumn3[0][pos3_1],185+410, 192+97.5,70,97.5 );
      image(slotColumn3[1][pos3_2], 185+410, 290+97.5,70,97.5);
      image(slotColumn3[2][pos3_3], 185+410, 290+97.5+97.5,70,97.5);
-     pos3_1++; 
-     pos3_2++;
-     pos3_3++;
+     pos3_1--; 
+     pos3_2--;
+     pos3_3--;
 
-     if (pos3_1 > 3) {
-    pos3_1 = 0;
+     if (pos3_1 <0) {
+    pos3_1 = 3;
   } 
-  if(pos3_2 >3)
+  if(pos3_2 <0)
   {
-    pos3_2=0;
+    pos3_2=3;
 
   }
-  if(pos3_3 >3){
-    pos3_3=0;
+  if(pos3_3 <0){
+    pos3_3=3;
   }
 
 }
