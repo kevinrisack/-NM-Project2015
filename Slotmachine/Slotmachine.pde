@@ -107,6 +107,7 @@ void draw()
   if(gameStatus == "START")
   {
      HendelControle();
+     HitControle();
 }
 
 if(gameStatus == "PULLED")
@@ -163,9 +164,12 @@ void HendelControle(){
     int lijstSize = handPositieLijst.size();
 
     if(handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y && handPositieLijst.get(0).z+100 < handPositieLijst.get(lijstSize-1).z)
-      gameStatus = "PULLED";
+      {
+        gameStatus = "PULLED";
+        handPositieLijst.clear();
+      }
 
-    if(lijstSize >= listSize)
+    if(handPositieLijst.size() >= listSize)
       handPositieLijst.remove(0);
 
     popMatrix();
@@ -179,12 +183,13 @@ void HitControle(){
     pushMatrix();
 
     //Position hand
-    PVector handPosition = leap.getPosition(hand); println("x: " + handPosition.x + " y: " + handPosition.y + " z: " + handPosition.z);
+    PVector handPosition = leap.getPosition(hand);
     handPositieLijst.add(handPosition);
 
     int lijstSize = handPositieLijst.size();
 
-    if(handPositieLijst.get(0).x-100 > handPositieLijst.get(lijstSize-1).x)
+    //L <-- R
+    if(handPositieLijst.get(0).x-100 > handPositieLijst.get(lijstSize-1).x || handPositieLijst.get(0).x+100 > handPositieLijst.get(lijstSize-1).x || handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y)
     {
       println("!!HIT!!");
       switch (lastSlotStopped)
@@ -204,7 +209,7 @@ void HitControle(){
       }
     }
 
-    if(lijstSize >= listSize)
+    if(handPositieLijst.size() >= listSize)
       handPositieLijst.remove(0);
 
     popMatrix();
@@ -254,7 +259,6 @@ void CheckFinished()
     pos3_2=3;
     pos3_3=0;
 
-    lastSlotStopped=0;
     handPositieLijst.clear();
     gameStatus = "START";
   }

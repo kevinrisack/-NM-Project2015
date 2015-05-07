@@ -61,22 +61,22 @@ int slot1=0,slot2=0,slot3=0;
 public void setup()
 {
   size(1772/2,1417/2);
-	
-	frameRate(6);
-	imgSlot1[0] = loadImage("images/nmct.png");
-	imgSlot1[3]=loadImage("images/dae.png");
-	imgSlot1[2]=loadImage("images/devine.png");
-	imgSlot1[1]=loadImage("images/howest.png");
+  
+  frameRate(6);
+  imgSlot1[0] = loadImage("images/nmct.png");
+  imgSlot1[3]=loadImage("images/dae.png");
+  imgSlot1[2]=loadImage("images/devine.png");
+  imgSlot1[1]=loadImage("images/howest.png");
 
-	imgSlot2[3] = loadImage("images/nmct.png");
-	imgSlot2[1]=loadImage("images/dae.png");
-	imgSlot2[2]=loadImage("images/devine.png");
-	imgSlot2[0]=loadImage("images/howest.png");
+  imgSlot2[3] = loadImage("images/nmct.png");
+  imgSlot2[1]=loadImage("images/dae.png");
+  imgSlot2[2]=loadImage("images/devine.png");
+  imgSlot2[0]=loadImage("images/howest.png");
 
-	imgSlot3[2] = loadImage("images/nmct.png");
-	imgSlot3[3]=loadImage("images/dae.png");
-	imgSlot3[0]=loadImage("images/devine.png");
-	imgSlot3[1]=loadImage("images/howest.png");
+  imgSlot3[2] = loadImage("images/nmct.png");
+  imgSlot3[3]=loadImage("images/dae.png");
+  imgSlot3[0]=loadImage("images/devine.png");
+  imgSlot3[1]=loadImage("images/howest.png");
 
   leap = new LeapMotionP5(this);
   handPositieLijst = new ArrayList<PVector>();
@@ -85,24 +85,24 @@ public void setup()
   imgSlotmachineLeverDown = loadImage("images/Slotmachine-leverDown.png");
 
 
-	/*slotColumn1[0]=imgSlot1;
-	slotColumn1[1]=imgSlot1;
-	slotColumn1[2]=imgSlot1;
+  /*slotColumn1[0]=imgSlot1;
+  slotColumn1[1]=imgSlot1;
+  slotColumn1[2]=imgSlot1;
 
-	slotColumn2[0]=imgSlot1;
-	slotColumn2[1]=imgSlot1;
-	slotColumn2[2]=imgSlot1;
+  slotColumn2[0]=imgSlot1;
+  slotColumn2[1]=imgSlot1;
+  slotColumn2[2]=imgSlot1;
 
-	slotColumn2[0]=imgSlot1;
-	slotColumn2[1]=imgSlot1;
-	slotColumn2[2]=imgSlot1;*/
-	
+  slotColumn2[0]=imgSlot1;
+  slotColumn2[1]=imgSlot1;
+  slotColumn2[2]=imgSlot1;*/
+  
 
 }
 
 public void draw()
 {
-	
+  
   if(gameStatus == "INIT")
   {
      background(50);
@@ -125,8 +125,9 @@ public void draw()
   }
 
   if(gameStatus == "START")
-	{
+  {
      HendelControle();
+     HitControle();
 }
 
 if(gameStatus == "PULLED")
@@ -141,11 +142,11 @@ if(gameStatus == "PULLED")
   }
 
 if(gameStatus == "BEZIG") {
-	if(timer == false)
-	{
+  if(timer == false)
+  {
     background(50);
     image(imgSlotMachine,0,0,1772/2,1417/2);
-	}
+  }
   else
   {
     background(50);
@@ -155,10 +156,10 @@ if(gameStatus == "BEZIG") {
 
   HitControle();
   keyPressed();
-	
-	checkSlot1();
- 	checkSlot2();
- 	checkSlot3();
+  
+  checkSlot1();
+  checkSlot2();
+  checkSlot3();
 
   
 
@@ -183,9 +184,12 @@ public void HendelControle(){
     int lijstSize = handPositieLijst.size();
 
     if(handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y && handPositieLijst.get(0).z+100 < handPositieLijst.get(lijstSize-1).z)
-      gameStatus = "PULLED";
+      {
+        gameStatus = "PULLED";
+        handPositieLijst.clear();
+      }
 
-    if(lijstSize >= listSize)
+    if(handPositieLijst.size() >= listSize)
       handPositieLijst.remove(0);
 
     popMatrix();
@@ -199,29 +203,33 @@ public void HitControle(){
     pushMatrix();
 
     //Position hand
-    PVector handPosition = leap.getPosition(hand); println("x: " + handPosition.x + " y: " + handPosition.y + " z: " + handPosition.z);
+    PVector handPosition = leap.getPosition(hand);
     handPositieLijst.add(handPosition);
 
     int lijstSize = handPositieLijst.size();
 
-    if(handPositieLijst.get(0).x-100 > handPositieLijst.get(lijstSize-1).x)
+    //L <-- R
+    if(handPositieLijst.get(0).x-100 > handPositieLijst.get(lijstSize-1).x || handPositieLijst.get(0).x+100 > handPositieLijst.get(lijstSize-1).x || handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y)
     {
       println("!!HIT!!");
       switch (lastSlotStopped)
       {
         case 1: lastSlotStopped=0; slot1=0;
         println("Slot1 slipped"); checkSlot1(); slot1=1;
+        handPositieLijst.clear();
         break;
         case 2: lastSlotStopped=0; slot2=0;
         println("Slot2 slipped"); checkSlot2(); slot2=1;
+        handPositieLijst.clear();
         break;
         case 3: lastSlotStopped=0; slot3=0;
         println("Slot3 slipped"); checkSlot3(); slot3=1;
+        handPositieLijst.clear();
         break;
       }
     }
 
-    if(lijstSize >= listSize)
+    if(handPositieLijst.size() >= listSize)
       handPositieLijst.remove(0);
 
     popMatrix();
@@ -271,7 +279,6 @@ public void CheckFinished()
     pos3_2=3;
     pos3_3=0;
 
-    lastSlotStopped=0;
     handPositieLijst.clear();
     gameStatus = "START";
   }
@@ -280,94 +287,94 @@ public void CheckFinished()
 
 public void checkSlot1()
 {
-	if(slot1==0){
-  	 image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
-  	 image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
-  	 image(slotColumn1[2][pos1_3], 185+35, 290+97.5f+97.5f,70,97.5f);
-  	 pos1_1++; 
-  	 pos1_2++;
-  	 pos1_3++;
+  if(slot1==0){
+     image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
+     image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
+     image(slotColumn1[2][pos1_3], 185+35, 290+97.5f+97.5f,70,97.5f);
+     pos1_1++; 
+     pos1_2++;
+     pos1_3++;
 
-  	 if (pos1_1 > 3) {
+     if (pos1_1 > 3) {
     pos1_1 = 0;
   } 
   if(pos1_2 >3)
   {
-  	pos1_2=0;
+    pos1_2=0;
 
   }
   if(pos1_3 >3){
-  	pos1_3=0;
+    pos1_3=0;
   }
 
 }
   else{
-  	 	  image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
-  	 image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
-  	 image(slotColumn1[2][pos1_3], 185+35, 290+97.5f+97.5f,70,97.5f);
+        image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
+     image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
+     image(slotColumn1[2][pos1_3], 185+35, 290+97.5f+97.5f,70,97.5f);
   }
 
 }
 
 public void checkSlot2()
 {
-	if(slot2==0){
-  	 image(slotColumn2[0][pos2_1],185+210, 192+97.5f,70,97.5f );
-  	 image(slotColumn2[1][pos2_2], 185+210, 290+97.5f,70,97.5f);
-  	 image(slotColumn2[2][pos2_3], 185+210, 290+97.5f+97.5f,70,97.5f);
-  	 pos2_1++; 
-  	 pos2_2++;
-  	 pos2_3++;
+  if(slot2==0){
+     image(slotColumn2[0][pos2_1],185+210, 192+97.5f,70,97.5f );
+     image(slotColumn2[1][pos2_2], 185+210, 290+97.5f,70,97.5f);
+     image(slotColumn2[2][pos2_3], 185+210, 290+97.5f+97.5f,70,97.5f);
+     pos2_1++; 
+     pos2_2++;
+     pos2_3++;
 
-  	 if (pos2_1 > 3) {
+     if (pos2_1 > 3) {
     pos2_1 = 0;
   } 
   if(pos2_2 >3)
   {
-  	pos2_2=0;
+    pos2_2=0;
 
   }
   if(pos2_3 >3){
-  	pos2_3=0;
+    pos2_3=0;
   }
 
 }
   else{
-  	 image(slotColumn2[0][pos2_1],185+210, 192+97.5f,70,97.5f );
-  	 image(slotColumn2[1][pos2_2], 185+210, 290+97.5f,70,97.5f);
-  	 image(slotColumn2[2][pos2_3], 185+210, 290+97.5f+97.5f,70,97.5f);
+     image(slotColumn2[0][pos2_1],185+210, 192+97.5f,70,97.5f );
+     image(slotColumn2[1][pos2_2], 185+210, 290+97.5f,70,97.5f);
+     image(slotColumn2[2][pos2_3], 185+210, 290+97.5f+97.5f,70,97.5f);
   }
-	
+  
 
 }
 
 public void checkSlot3()
 {
-	if(slot3==0){
-  	image(slotColumn3[0][pos3_1],185+410, 192+97.5f,70,97.5f );
-  	 image(slotColumn3[1][pos3_2], 185+410, 290+97.5f,70,97.5f);
-  	 image(slotColumn3[2][pos3_3], 185+410, 290+97.5f+97.5f,70,97.5f);
-  	 pos3_1++; 
-  	 pos3_2++;
-  	 pos3_3++;
+  if(slot3==0){
+    image(slotColumn3[0][pos3_1],185+410, 192+97.5f,70,97.5f );
+     image(slotColumn3[1][pos3_2], 185+410, 290+97.5f,70,97.5f);
+     image(slotColumn3[2][pos3_3], 185+410, 290+97.5f+97.5f,70,97.5f);
+     pos3_1++; 
+     pos3_2++;
+     pos3_3++;
 
-  	 if (pos3_1 > 3) {
+     if (pos3_1 > 3) {
     pos3_1 = 0;
   } 
   if(pos3_2 >3)
   {
-  	pos3_2=0;
+    pos3_2=0;
 
   }
   if(pos3_3 >3){
-  	pos3_3=0;
+    pos3_3=0;
   }
 
 }
   else{
-  	image(slotColumn3[0][pos3_1],185+410, 192+97.5f,70,97.5f );
-  	 image(slotColumn3[1][pos3_2], 185+410, 290+97.5f,70,97.5f);
-  	 image(slotColumn3[2][pos3_3], 185+410, 290+97.5f+97.5f,70,97.5f);
+    image(slotColumn3[0][pos3_1],185+410, 192+97.5f,70,97.5f );
+     image(slotColumn3[1][pos3_2], 185+410, 290+97.5f,70,97.5f);
+     image(slotColumn3[2][pos3_3], 185+410, 290+97.5f+97.5f,70,97.5f);
   }
 }
   static public void main(String[] passedArgs) {
