@@ -46,6 +46,7 @@ int lastSlotStopped=0;
 boolean hitcheat = false;
 
 PImage imgStrawberry = new PImage();
+int strawberryY = 1;
 
 
 int pos1_1 = 0;
@@ -138,7 +139,7 @@ public void draw()
 
   if(gameStatus == "START")
   {
-    println("Gamestatus = " + gameStatus);
+    println("Gamestatus = " + gameStatus); gameStatus = "PULLED";
      HendelControle();
      
 }
@@ -173,13 +174,17 @@ if(gameStatus == "BEZIG") {
     TijdControle();
   }
 
- 
   keyPressed();
   
   checkSlot1();
   checkSlot2();
   checkSlot3();
 
+  if(strawberryY < height+100)
+  {
+    image(imgStrawberry, 500, strawberryY);
+    strawberryY = strawberryY+20;
+  }
   
 
 

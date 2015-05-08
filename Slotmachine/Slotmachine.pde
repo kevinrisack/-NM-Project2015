@@ -3,7 +3,7 @@ import com.leapmotion.leap.*;
 import com.leapmotion.leap.Gesture.*;
 
 LeapMotionP5 leap;
-PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit;;
+PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit;
 PImage[] imgSlot1=new PImage[4];
 PImage[] imgSlot2=new PImage[4];
 PImage[] imgSlot3=new PImage[4];
@@ -26,6 +26,8 @@ int lastSlotStopped=0;
 boolean hitcheat = false;
 
 PImage imgStrawberry = new PImage();
+int strawberryY = 1;
+boolean allowStrawberry = false ,timerStrawberry = false;
 
 
 int pos1_1 = 0;
@@ -101,7 +103,7 @@ void draw()
       textSize(16);
       text(""+credit,width-100,50);
 
-    image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
+     image(slotColumn1[0][pos1_1], 185+35, 192+97.5,70,97.5);
      image(slotColumn1[1][pos1_2], 185+35, 290+97.5,70,97.5);
      image(slotColumn1[2][pos1_3], 185+35, 290+97.5+97.5,70,97.5);
 
@@ -118,7 +120,11 @@ void draw()
 
   if(gameStatus == "START")
   {
-    println("Gamestatus = " + gameStatus);
+    println("Gamestatus = " + gameStatus); 
+
+    gameStatus = "PULLED";
+    timerStrawberry = false;
+    
      HendelControle();
      
 }
@@ -153,13 +159,17 @@ if(gameStatus == "BEZIG") {
     TijdControle();
   }
 
- 
   keyPressed();
   
   checkSlot1();
   checkSlot2();
   checkSlot3();
 
+  if(strawberryY < height+100 && allowStrawberry == true)
+  {
+    image(imgStrawberry, 500, strawberryY);
+    strawberryY = strawberryY+20;
+  }
   
 
 
