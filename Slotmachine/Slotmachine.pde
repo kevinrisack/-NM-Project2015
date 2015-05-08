@@ -5,10 +5,12 @@ import com.leapmotion.leap.Gesture.*;
 LeapMotionP5 leap;
 PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit;;
 PImage[] imgSlot1=new PImage[4];
+PImage[] imgSlot2=new PImage[4];
+PImage[] imgSlot3=new PImage[4];
 
 PImage[][] slotColumn1={imgSlot1,imgSlot1,imgSlot1};
-PImage[][] slotColumn2={imgSlot1,imgSlot1,imgSlot1};
-PImage[][] slotColumn3={imgSlot1,imgSlot1,imgSlot1};
+PImage[][] slotColumn2={imgSlot2,imgSlot2,imgSlot2};
+PImage[][] slotColumn3={imgSlot3,imgSlot3,imgSlot3};
 int leverPulled=0;
 int firstTime=0;
 int credit=100;
@@ -50,6 +52,16 @@ void setup()
   imgSlot1[1]=loadImage("images/dae.png");
   imgSlot1[2]=loadImage("images/devine.png");
   imgSlot1[3]=loadImage("images/howest.png");
+
+  imgSlot2[0] = loadImage("images/nmct.png");
+  imgSlot2[3]=loadImage("images/dae.png");
+  imgSlot2[1]=loadImage("images/devine.png");
+  imgSlot2[2]=loadImage("images/howest.png");
+
+  imgSlot3[3] = loadImage("images/nmct.png");
+  imgSlot3[1]=loadImage("images/dae.png");
+  imgSlot3[0]=loadImage("images/devine.png");
+  imgSlot3[2]=loadImage("images/howest.png");
   imgCredit=loadImage("images/bitcoin.png");
 
   imgStrawberry = loadImage("images/strawberry.png");
@@ -106,7 +118,7 @@ void draw()
 
   if(gameStatus == "START")
   {
-    println("Gamestatus = " + gamestatus);
+    println("Gamestatus = " + gameStatus);
      HendelControle();
      
 }
@@ -115,6 +127,8 @@ if(gameStatus == "PULLED")
   {
     background(50);
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
     timer = true;
     startTime = millis();
     
@@ -127,11 +141,15 @@ if(gameStatus == "BEZIG") {
   {
     background(50);
     image(imgSlotMachine,0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
   }
   else
   {
     background(50);
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
     TijdControle();
   }
 
@@ -147,13 +165,13 @@ if(gameStatus == "BEZIG") {
 
 }
 if(gameStatus=="HIT"){
-  println("Gamestatus = " + gamestatus);
+  println("Gamestatus = " + gameStatus);
 
   HitControle();
   TijdControle();
 
   if(timer = false)
-    gamestatus = "START";
+    gameStatus = "START";
 
 
 }
@@ -203,7 +221,7 @@ void HitControle(){
 
     int lijstSize = handPositieLijst2.size();
 
-    if(handPositieLijst2.get(0).x+300 < handPositieLijst2.get(lijstSize-1).x)
+    if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot1 slipped");
 
@@ -221,7 +239,7 @@ void HitControle(){
        gameStatus = "START";
 
     }
-    else if(handPositieLijst2.get(0).y+300 < handPositieLijst2.get(lijstSize-1).y)
+    else if(handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y)
     {
       println("Slot2 slipped");
       slot2=0;
@@ -239,7 +257,7 @@ void HitControle(){
          
     }
 
-   else if(handPositieLijst2.get(0).x-300 > handPositieLijst2.get(lijstSize-1).x)
+   else if(handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot3 slipped");
       slot3=0;

@@ -25,10 +25,12 @@ public class Slotmachine extends PApplet {
 LeapMotionP5 leap;
 PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit;;
 PImage[] imgSlot1=new PImage[4];
+PImage[] imgSlot2=new PImage[4];
+PImage[] imgSlot3=new PImage[4];
 
 PImage[][] slotColumn1={imgSlot1,imgSlot1,imgSlot1};
-PImage[][] slotColumn2={imgSlot1,imgSlot1,imgSlot1};
-PImage[][] slotColumn3={imgSlot1,imgSlot1,imgSlot1};
+PImage[][] slotColumn2={imgSlot2,imgSlot2,imgSlot2};
+PImage[][] slotColumn3={imgSlot3,imgSlot3,imgSlot3};
 int leverPulled=0;
 int firstTime=0;
 int credit=100;
@@ -42,6 +44,8 @@ String gameStatus = "INIT";
 
 int lastSlotStopped=0;
 boolean hitcheat = false;
+
+PImage imgStrawberry = new PImage();
 
 
 int pos1_1 = 0;
@@ -68,7 +72,19 @@ public void setup()
   imgSlot1[1]=loadImage("images/dae.png");
   imgSlot1[2]=loadImage("images/devine.png");
   imgSlot1[3]=loadImage("images/howest.png");
+
+  imgSlot2[0] = loadImage("images/nmct.png");
+  imgSlot2[3]=loadImage("images/dae.png");
+  imgSlot2[1]=loadImage("images/devine.png");
+  imgSlot2[2]=loadImage("images/howest.png");
+
+  imgSlot3[3] = loadImage("images/nmct.png");
+  imgSlot3[1]=loadImage("images/dae.png");
+  imgSlot3[0]=loadImage("images/devine.png");
+  imgSlot3[2]=loadImage("images/howest.png");
   imgCredit=loadImage("images/bitcoin.png");
+
+  imgStrawberry = loadImage("images/strawberry.png");
 
   leap = new LeapMotionP5(this);
   handPositieLijst = new ArrayList<PVector>();
@@ -122,6 +138,7 @@ public void draw()
 
   if(gameStatus == "START")
   {
+    println("Gamestatus = " + gameStatus);
      HendelControle();
      
 }
@@ -130,6 +147,8 @@ if(gameStatus == "PULLED")
   {
     background(50);
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
     timer = true;
     startTime = millis();
     
@@ -142,11 +161,15 @@ if(gameStatus == "BEZIG") {
   {
     background(50);
     image(imgSlotMachine,0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
   }
   else
   {
     background(50);
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
+     image(imgCredit,width-150,25,30,30);
+      text(""+credit,width-100,50);
     TijdControle();
   }
 
@@ -162,10 +185,13 @@ if(gameStatus == "BEZIG") {
 
 }
 if(gameStatus=="HIT"){
-  println("gamestatus=HIT");
+  println("Gamestatus = " + gameStatus);
 
   HitControle();
-  
+  TijdControle();
+
+  if(timer = false)
+    gameStatus = "START";
 
 
 }
@@ -191,6 +217,7 @@ public void HendelControle(){
 
     if(handPositieLijst.get(0).y+100 < handPositieLijst.get(lijstSize-1).y && handPositieLijst.get(0).z+100 < handPositieLijst.get(lijstSize-1).z)
       {
+        totalTime = 500;
         gameStatus = "PULLED";
         handPositieLijst.clear();
       }
@@ -214,7 +241,7 @@ public void HitControle(){
 
     int lijstSize = handPositieLijst2.size();
 
-    if(handPositieLijst2.get(0).x+300 < handPositieLijst2.get(lijstSize-1).x)
+    if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot1 slipped");
 
@@ -232,7 +259,7 @@ public void HitControle(){
        gameStatus = "START";
 
     }
-    else if(handPositieLijst2.get(0).y+300 < handPositieLijst2.get(lijstSize-1).y)
+    else if(handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y)
     {
       println("Slot2 slipped");
       slot2=0;
@@ -250,7 +277,7 @@ public void HitControle(){
          
     }
 
-   else if(handPositieLijst2.get(0).x-300 > handPositieLijst2.get(lijstSize-1).x)
+   else if(handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot3 slipped");
       slot3=0;
@@ -319,7 +346,11 @@ public void CheckFinished()
     pos3_2=3;
     pos3_3=0;*/
 
-    handPositieLijst.clear(); gameStatus="HIT";
+    handPositieLijst.clear();
+    
+    totalTime = 5000; timer = true; startTime = millis();
+
+    gameStatus="HIT";
     
   }
 
