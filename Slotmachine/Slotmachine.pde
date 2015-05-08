@@ -170,7 +170,7 @@ if(gameStatus=="HIT"){
   HitControle();
   TijdControle();
 
-  if(timer = false)
+  if(timer == false)
     gameStatus = "START";
 
 
