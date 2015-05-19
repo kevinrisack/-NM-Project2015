@@ -26,8 +26,9 @@ int lastSlotStopped=0;
 boolean hitcheat = false;
 
 PImage imgStrawberry = new PImage();
-int strawberryY = 1;
+int strawberryY = -200;
 boolean allowStrawberry = false ,timerStrawberry = false;
+int startTimeStrawberry, totalTimeStrawberry = 5000;
 
 
 int pos1_1 = 0;
@@ -48,8 +49,7 @@ int slot1=0,slot2=0,slot3=0;
 void setup()
 {
   size(1772/2,1417/2);
-  
-  frameRate(6);
+
   imgSlot1[0] = loadImage("images/nmct.png");
   imgSlot1[1]=loadImage("images/dae.png");
   imgSlot1[2]=loadImage("images/devine.png");
@@ -122,10 +122,9 @@ void draw()
   {
     println("Gamestatus = " + gameStatus); 
 
-    gameStatus = "PULLED";
-    timerStrawberry = false;
-    
-     HendelControle();
+    gameStatus = "PULLED";  //Waneer Leapmotion is N/A
+
+     //HendelControle();
      
 }
 
@@ -135,8 +134,11 @@ if(gameStatus == "PULLED")
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
      image(imgCredit,width-150,25,30,30);
       text(""+credit,width-100,50);
-    timer = true;
-    startTime = millis();
+    
+    timer = true; totalTime = 500; startTime = millis();
+
+    strawberryY = -200; allowStrawberry = false;
+    timerStrawberry = false; totalTimeStrawberry = 5000; startTimeStrawberry = millis();
     
     handPositieLijst.clear();
     gameStatus = "BEZIG";
@@ -165,10 +167,14 @@ if(gameStatus == "BEZIG") {
   checkSlot2();
   checkSlot3();
 
+  if(allowStrawberry == false)
+    TijdControleStrawberry();
+
   if(strawberryY < height+100 && allowStrawberry == true)
   {
     image(imgStrawberry, 500, strawberryY);
-    strawberryY = strawberryY+20;
+    strawberryY += 20;
+    checkFruitSlice();
   }
   
 
@@ -181,8 +187,12 @@ if(gameStatus=="HIT"){
   TijdControle();
 
   if(timer == false)
+  {
+    slot1=0;    
+    slot2=0;
+    slot3=0;
     gameStatus = "START";
-
+  }
 
 }
 
@@ -192,6 +202,33 @@ void TijdControle(){
     int passedTime = millis() - startTime;
     if (passedTime > totalTime)
       timer = false;
+  }
+
+  void TijdControleStrawberry(){
+    int passedTime = millis() - startTimeStrawberry;
+    if (passedTime > totalTimeStrawberry)
+      allowStrawberry = true;
+  }
+
+  void checkFruitSlice(){
+    println("FuitSliceControle");
+      for(Hand hand : leap.getHandList()){
+    pushMatrix();
+
+    //Position hand
+    PVector handPosition = leap.getPosition(hand);
+    handPositieLijst2.add(handPosition);
+
+    int lijstSize = handPositieLijst2.size();
+
+    if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x || //Links --> Rechts
+      handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y ||  //Boven --> Onder
+      handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x ||  //Rechts --> Links
+      handPositieLijst2.get(0).y-200 > handPositieLijst2.get(lijstSize-1).y)    //Onder --> Boven
+    {
+        // INZET x2
+    }
+  }
   }
 
 void HendelControle(){
@@ -231,6 +268,7 @@ void HitControle(){
 
     int lijstSize = handPositieLijst2.size();
 
+    //Links --> Rechts
     if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot1 slipped");
@@ -249,6 +287,8 @@ void HitControle(){
        gameStatus = "START";
 
     }
+    
+    //Boven --> Onder
     else if(handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y)
     {
       println("Slot2 slipped");
@@ -267,6 +307,7 @@ void HitControle(){
          
     }
 
+   //Rechts --> Links
    else if(handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x)
     {
       println("Slot3 slipped");
@@ -321,7 +362,7 @@ void HitControle(){
 void CheckFinished()
 {
   if((slot1==1) && (slot2==1) && (slot3==1)){
-   
+   frameRate(12);
    
 
     /*pos1_1=0;
@@ -339,6 +380,8 @@ void CheckFinished()
     handPositieLijst.clear();
     
     totalTime = 5000; timer = true; startTime = millis();
+
+    background(50); image(imgSlotMachine,0,0,1772/2,1417/2); checkSlot1(); checkSlot2(); checkSlot3();
 
     gameStatus="HIT";
     
