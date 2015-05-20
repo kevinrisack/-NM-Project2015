@@ -29,7 +29,7 @@ Minim minim;
 AudioPlayer winplayer;
 AudioPlayer hendelplayer;
 AudioInput input;
-PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit,imgWin;
+PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit,imgWin, imgLegende;
 PImage[] imgSlot1=new PImage[4];
 PImage[] imgSlot2=new PImage[4];
 PImage[] imgSlot3=new PImage[4];
@@ -42,6 +42,8 @@ int firstTime=0;
 int credit=100;
 int bet=0;
 int multiplier=1;
+boolean won=false;
+
 
 boolean getrokken = false, timer = false;
 ArrayList<PVector> handPositieLijst;
@@ -96,7 +98,8 @@ public void setup()
   minim = new Minim(this);
   winplayer = minim.loadFile("sounds/win.mp3");
   hendelplayer=minim.loadFile("sounds/handle.mp3");
- 
+
+  imgLegende = loadImage("images/Legende.png");
 
   imgStrawberry = loadImage("images/strawberry.png");
   strawberryY=height+100;
@@ -109,18 +112,6 @@ public void setup()
   imgSlotMachine = loadImage("images/Slotmachine.png");
   imgSlotmachineLeverDown = loadImage("images/Slotmachine-leverDown.png");
 
-
-  /*slotColumn1[0]=imgSlot1;
-  slotColumn1[1]=imgSlot1;
-  slotColumn1[2]=imgSlot1;
-
-  slotColumn2[0]=imgSlot1;
-  slotColumn2[1]=imgSlot1;
-  slotColumn2[2]=imgSlot1;
-
-  slotColumn2[0]=imgSlot1;
-  slotColumn2[1]=imgSlot1;
-  slotColumn2[2]=imgSlot1;*/
   
 
 }
@@ -135,6 +126,8 @@ public void draw()
       image(imgCredit,width-150,25,30,30);
       textSize(16);
       text(""+credit,width-100,50);
+
+      image(imgLegende, 0, 50, 140,195);
 
      image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
      image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
@@ -153,6 +146,7 @@ public void draw()
   }
   if(gameStatus=="BET")
   {
+    won=false;
     if(winplayer.isPlaying())
       winplayer.pause();
     drawSlots();
@@ -164,8 +158,9 @@ public void draw()
 
   if(gameStatus == "START")
   {
-    println("Gamestatus = " + gameStatus);
+    //println("Gamestatus = " + gameStatus);
     
+    TijdControle();
     if(timer == false)
      HendelControle();
      
@@ -179,10 +174,12 @@ if(gameStatus == "PULLED")
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
      image(imgCredit,width-150,25,30,30);
       text(""+credit,width-100,50);
+    image(imgLegende, 0, 50, 140,195);
+
    timer = true; totalTime = 500; startTime = millis();
     allowStrawberry = random(1) > .5f;
     if(allowStrawberry == false) strawberryY = -200;
-     println("allowStrawberry: "+allowStrawberry);
+     //println("allowStrawberry: "+allowStrawberry);
     totalTimeStrawberry = 5000; startTimeStrawberry = millis();
     
     handPositieLijst.clear();
@@ -197,6 +194,7 @@ if(gameStatus == "BEZIG") {
     image(imgSlotMachine,0,0,1772/2,1417/2);
      image(imgCredit,width-150,25,30,30);
       text(""+credit,width-100,50);
+      image(imgLegende, 0, 50, 140,195);
   }
   else
   {
@@ -204,6 +202,7 @@ if(gameStatus == "BEZIG") {
     image(imgSlotmachineLeverDown, 0,0,1772/2,1417/2);
      image(imgCredit,width-150,25,30,30);
       text(""+credit,width-100,50);
+      image(imgLegende, 0, 50, 140,195);
     TijdControle();
   }
 
@@ -225,7 +224,7 @@ if(gameStatus == "BEZIG") {
 
 }
 if(gameStatus=="HIT"){
-  println("Gamestatus = " + gameStatus);
+  //println("Gamestatus = " + gameStatus);
 
   HitControle();
   TijdControle();
@@ -239,8 +238,10 @@ if(gameStatus=="WIN"){
 
    drawSlots();
 
-     image(imgWin,(width/2)-150,height/2+200,300,100);
+     image(imgWin,(width/2)-150,height/2-50,300,100);
+    println("showing win image");
 
+    TijdControle();
      if(timer == false)
       gameStatus = "BET";
 }
@@ -248,10 +249,14 @@ if(gameStatus=="WIN"){
 
 public void drawSlots()
 {
+  println("redrawing slots");
+  background(50);
   image(imgSlotMachine,0,0,1772/2,1417/2);
       image(imgCredit,width-150,25,30,30);
       textSize(16);
       text(""+credit,width-100,50);
+
+      image(imgLegende, 0, 50, 140,195);
 
        image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
      image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
@@ -279,7 +284,7 @@ public void TijdControle(){
   }
 
   public void checkFruitSlice(){
-    println("FuitSliceControle");
+    //println("FuitSliceControle");
       for(Hand hand : leap.getHandList()){
     pushMatrix();
 
@@ -308,7 +313,7 @@ for(Finger f: leap.getFingerList())
 {
   iFingers++;
 }
-println(iFingers);
+//println(iFingers);
 switch (iFingers) {
 
   case 1: bet=1;
@@ -338,7 +343,7 @@ switch (iFingers) {
 
 public void HendelControle(){
     for(Hand hand : leap.getHandList()){
-    println(hand);
+    //println(hand);
     pushMatrix();
 
     //Position hand
@@ -367,11 +372,12 @@ image(imgSlotMachine,0,0,1772/2,1417/2);
       image(imgCredit,width-150,25,30,30);
       textSize(16);
       text(""+credit,width-100,50);
+      image(imgLegende, 0, 50, 140,195);
 
    checkSlot1();
    checkSlot2();
    checkSlot3();
-    println("hitcontrole");
+    //println("hitcontrole");
       for(Hand hand : leap.getHandList()){
     pushMatrix();
 
@@ -471,50 +477,68 @@ image(imgSlotMachine,0,0,1772/2,1417/2);
 public void CheckFinished()
 {
   if((slot1==1) && (slot2==1) && (slot3==1)){
-   
-   
 
-    /*pos1_1=0;
-    pos1_2=1;
-    pos1_3=2;
-
-    pos2_1=1;
-    pos2_2=2;
-    pos2_3=3;
-
-    pos3_1=2;
-    pos3_2=3;
-    pos3_3=0;*/
     winControle();
-
+  
     handPositieLijst.clear();
-    
+    if(won==false)
+    {
     totalTime = 5000; timer = true; startTime = millis();
 
-    gameStatus="HIT";
+    gameStatus="HIT";}
     
   }
 
 }
 public void winControle()
 {
-  if((pos1_2==pos2_2)&&(pos2_2==pos3_2))
+  if((pos1_2==0)&&(pos2_2==0)&&(pos3_2==3))
   {
-    switch (pos1_2) {
-      case 0: credit+=bet+((bet*2)*multiplier);
-              break;
-      case 1: credit+=bet+((bet*3)*multiplier);
-              break;
-      case 2: credit+=bet+((bet*4)*multiplier);
-              break;
-      case 3: credit+=bet+((bet*5)*multiplier);
-              break;
-    }
-    timer = true; totalTime = 2000; startTime = millis();
+    
+       credit+=bet+((bet*2)*multiplier);
+       println("oranges");
+        timer = true; totalTime = 4000; startTime = millis();
     winplayer.rewind();
     winplayer.play();
+    won=true;
     gameStatus="WIN";
-  }
+      
+    }
+   else if((pos1_2==1)&&(pos2_2==3)&&(pos3_2==1))
+   {
+      credit+=bet+((bet*3)*multiplier);
+     println("lemons");
+      timer = true; totalTime = 4000; startTime = millis();
+    winplayer.rewind();
+    winplayer.play();
+    won=true;
+    gameStatus="WIN";
+   }
+    else if((pos1_2==2)&&(pos2_2==1)&&(pos3_2==0))
+   {
+     credit+=bet+((bet*4)*multiplier);
+     println("grapes");
+      timer = true; totalTime = 4000; startTime = millis();
+    winplayer.rewind();
+    winplayer.play();
+    won=true;
+    gameStatus="WIN";
+   }
+   else if((pos1_2==3)&&(pos2_2==2)&&(pos3_2==2)){
+     
+     credit+=bet+((bet*5)*multiplier);
+      timer = true; totalTime = 4000; startTime = millis();
+    winplayer.rewind();
+    winplayer.play();
+    won=true;
+    gameStatus="WIN";
+   }
+   else{
+     won=false;
+   
+   }
+    
+  
 }
 
 public void checkSlot1()
