@@ -29,7 +29,7 @@ Minim minim;
 AudioPlayer winplayer;
 AudioPlayer hendelplayer;
 AudioInput input;
-PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit,imgWin, imgLegende;
+PImage imgBackground, imgSlotMachine, imgSlotmachineLeverDown,imgCredit,imgWin, imgLegende, imgx2, imgBet, imgPull, imgLastChance;
 PImage[] imgSlot1=new PImage[4];
 PImage[] imgSlot2=new PImage[4];
 PImage[] imgSlot3=new PImage[4];
@@ -43,6 +43,8 @@ int credit=100;
 int bet=0;
 int multiplier=1;
 boolean won=false;
+
+boolean doubleScore = false;
 
 
 boolean getrokken = false, timer = false;
@@ -100,6 +102,10 @@ public void setup()
   hendelplayer=minim.loadFile("sounds/handle.mp3");
 
   imgLegende = loadImage("images/Legende.png");
+  imgx2 = loadImage("images/X2.png");
+  imgBet = loadImage("images/bet.png");
+  imgPull = loadImage("images/pull.png");
+  imgLastChance = loadImage("images/last_chance.png");
 
   imgStrawberry = loadImage("images/strawberry.png");
   strawberryY=height+100;
@@ -146,10 +152,12 @@ public void draw()
   }
   if(gameStatus=="BET")
   {
-    won=false;
+    won=false; doubleScore = false; multiplier = 1;
     if(winplayer.isPlaying())
       winplayer.pause();
-    drawSlots();
+
+      drawSlots();
+      image(imgBet, 150, 10,100,100);
       
       checkFingers();
   
@@ -159,10 +167,15 @@ public void draw()
   if(gameStatus == "START")
   {
     //println("Gamestatus = " + gameStatus);
+
+    drawSlots();
     
     TijdControle();
     if(timer == false)
+    {
+     image(imgPull, 595, 10, 120, 100);
      HendelControle();
+    }
      
 }
 
@@ -224,8 +237,10 @@ if(gameStatus == "BEZIG") {
 
 }
 if(gameStatus=="HIT"){
-  //println("Gamestatus = " + gameStatus);
 
+  drawSlots();
+  image(imgLastChance, 370, 30, 150, 100);
+  
   HitControle();
   TijdControle();
 
@@ -257,6 +272,9 @@ public void drawSlots()
       text(""+credit,width-100,50);
 
       image(imgLegende, 0, 50, 140,195);
+
+      if(doubleScore == true)
+        image(imgx2, 0, 250, 140, 195);
 
        image(slotColumn1[0][pos1_1], 185+35, 192+97.5f,70,97.5f);
      image(slotColumn1[1][pos1_2], 185+35, 290+97.5f,70,97.5f);
@@ -299,7 +317,7 @@ public void TijdControle(){
       handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x ||  //Rechts --> Links
       handPositieLijst2.get(0).y-200 > handPositieLijst2.get(lijstSize-1).y)    //Onder --> Boven
     {
-        multiplier=2;
+        multiplier=2; doubleScore = true;
     }
   }
   }
@@ -367,12 +385,6 @@ public void HendelControle(){
 }
 
 public void HitControle(){
-  background(50);
-image(imgSlotMachine,0,0,1772/2,1417/2);
-      image(imgCredit,width-150,25,30,30);
-      textSize(16);
-      text(""+credit,width-100,50);
-      image(imgLegende, 0, 50, 140,195);
 
    checkSlot1();
    checkSlot2();
