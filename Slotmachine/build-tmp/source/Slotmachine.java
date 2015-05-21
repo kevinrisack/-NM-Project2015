@@ -108,7 +108,6 @@ public void setup()
   imgLastChance = loadImage("images/last_chance.png");
 
   imgStrawberry = loadImage("images/strawberry.png");
-  strawberryY=height+100;
   imgWin=loadImage("images/YouWin.png");
 
   leap = new LeapMotionP5(this);
@@ -147,8 +146,7 @@ public void draw()
      image(slotColumn3[1][pos3_2], 185+410, 290+97.5f,70,97.5f);
      image(slotColumn3[2][pos3_3], 185+410, 290+97.5f+97.5f,70,97.5f);
 
-     //gameStatus = "BET";
-     gameStatus = "PULLED";
+     gameStatus = "BET";
   }
   if(gameStatus=="BET")
   {
@@ -166,7 +164,6 @@ public void draw()
 
   if(gameStatus == "START")
   {
-    //println("Gamestatus = " + gameStatus);
 
     drawSlots();
     
@@ -190,9 +187,9 @@ if(gameStatus == "PULLED")
     image(imgLegende, 0, 50, 140,195);
 
    timer = true; totalTime = 500; startTime = millis();
-    allowStrawberry = random(1) > .5f;
+    
+    allowStrawberry = random(1) > .5f; strawberryY=height+100;
     if(allowStrawberry == false) strawberryY = -200;
-     //println("allowStrawberry: "+allowStrawberry);
     totalTimeStrawberry = 5000; startTimeStrawberry = millis();
     
     handPositieLijst.clear();
@@ -224,9 +221,13 @@ if(gameStatus == "BEZIG") {
   checkSlot1();
   checkSlot2();
   checkSlot3();
+
+  if(doubleScore == true)
+        image(imgx2, 0, 250, 140, 195);
+
   if(allowStrawberry==false)
     TijdControleStrawberry();
-  if(strawberryY < height+100 && allowStrawberry == true)
+  if(strawberryY < height+100 && allowStrawberry == true && doubleScore == false)
   {
     image(imgStrawberry, 500, strawberryY);
     strawberryY = strawberryY+20;
@@ -240,12 +241,15 @@ if(gameStatus=="HIT"){
 
   drawSlots();
   image(imgLastChance, 370, 30, 150, 100);
-  
+
   HitControle();
   TijdControle();
 
   if(timer == false)
+  {
+    slot1 = slot2 = slot3 = 0;
     gameStatus = "BET";
+  }
 
 
 }
@@ -254,17 +258,18 @@ if(gameStatus=="WIN"){
    drawSlots();
 
      image(imgWin,(width/2)-150,height/2-50,300,100);
-    println("showing win image");
 
     TijdControle();
      if(timer == false)
+     {
+      slot1 = slot2 = slot3 = 0;
       gameStatus = "BET";
+    }
 }
 }
 
 public void drawSlots()
 {
-  println("redrawing slots");
   background(50);
   image(imgSlotMachine,0,0,1772/2,1417/2);
       image(imgCredit,width-150,25,30,30);
@@ -302,7 +307,6 @@ public void TijdControle(){
   }
 
   public void checkFruitSlice(){
-    //println("FuitSliceControle");
       for(Hand hand : leap.getHandList()){
     pushMatrix();
 
@@ -312,12 +316,10 @@ public void TijdControle(){
 
     int lijstSize = handPositieLijst2.size();
 
-    if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x || //Links --> Rechts
-      handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y ||  //Boven --> Onder
-      handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x ||  //Rechts --> Links
-      handPositieLijst2.get(0).y-200 > handPositieLijst2.get(lijstSize-1).y)    //Onder --> Boven
+    if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x || handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y || handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x || handPositieLijst2.get(0).y-200 > handPositieLijst2.get(lijstSize-1).y)
     {
         multiplier=2; doubleScore = true;
+        handPositieLijst2.clear();
     }
   }
   }
@@ -331,7 +333,6 @@ for(Finger f: leap.getFingerList())
 {
   iFingers++;
 }
-//println(iFingers);
 switch (iFingers) {
 
   case 1: bet=1;
@@ -361,7 +362,6 @@ switch (iFingers) {
 
 public void HendelControle(){
     for(Hand hand : leap.getHandList()){
-    //println(hand);
     pushMatrix();
 
     //Position hand
@@ -389,7 +389,6 @@ public void HitControle(){
    checkSlot1();
    checkSlot2();
    checkSlot3();
-    //println("hitcontrole");
       for(Hand hand : leap.getHandList()){
     pushMatrix();
 
@@ -401,8 +400,6 @@ public void HitControle(){
 
     if(handPositieLijst2.get(0).x+200 < handPositieLijst2.get(lijstSize-1).x)
     {
-      println("Slot1 slipped");
-
       slot1=0;
       checkSlot1();
      slot1=1;
@@ -415,11 +412,11 @@ public void HitControle(){
     slot2=0;
     slot3=0;
        gameStatus = "BET";
+       winControle();
 
     }
     else if(handPositieLijst2.get(0).y+200 < handPositieLijst2.get(lijstSize-1).y)
     {
-      println("Slot2 slipped");
       slot2=0;
       checkSlot2();
       slot2=1;
@@ -431,13 +428,13 @@ public void HitControle(){
     slot2=0;
     slot3=0;
         gameStatus = "BET";
+        winControle();
          
          
     }
 
    else if(handPositieLijst2.get(0).x-200 > handPositieLijst2.get(lijstSize-1).x)
     {
-      println("Slot3 slipped");
       slot3=0;
       checkSlot3();
       slot3=1;
@@ -448,6 +445,7 @@ public void HitControle(){
     slot2=0;
     slot3=0;
         gameStatus = "BET";
+        winControle();
         
 
     }
@@ -508,7 +506,6 @@ public void winControle()
   {
     
        credit+=bet+((bet*2)*multiplier);
-       println("oranges");
         timer = true; totalTime = 4000; startTime = millis();
     winplayer.rewind();
     winplayer.play();
@@ -519,7 +516,6 @@ public void winControle()
    else if((pos1_2==1)&&(pos2_2==3)&&(pos3_2==1))
    {
       credit+=bet+((bet*3)*multiplier);
-     println("lemons");
       timer = true; totalTime = 4000; startTime = millis();
     winplayer.rewind();
     winplayer.play();
@@ -529,7 +525,6 @@ public void winControle()
     else if((pos1_2==2)&&(pos2_2==1)&&(pos3_2==0))
    {
      credit+=bet+((bet*4)*multiplier);
-     println("grapes");
       timer = true; totalTime = 4000; startTime = millis();
     winplayer.rewind();
     winplayer.play();
