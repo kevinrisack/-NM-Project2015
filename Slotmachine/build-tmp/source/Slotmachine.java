@@ -155,9 +155,14 @@ public void draw()
       winplayer.pause();
 
       drawSlots();
+
+      TijdControle();
+      if(timer == false)
+      {
       image(imgBet, 150, 10,100,100);
       
       checkFingers();
+    }
   
   
   }
@@ -248,6 +253,7 @@ if(gameStatus=="HIT"){
   if(timer == false)
   {
     slot1 = slot2 = slot3 = 0;
+    timer = true; totalTime = 2000; startTime = millis();
     gameStatus = "BET";
   }
 
@@ -365,7 +371,7 @@ public void HendelControle(){
     pushMatrix();
 
     //Position hand
-    PVector handPosition = leap.getPosition(hand); println("x: " + handPosition.x + " y: " + handPosition.y + " z: " + handPosition.z);
+    PVector handPosition = leap.getPosition(hand); 
     handPositieLijst.add(handPosition);
 
     int lijstSize = handPositieLijst.size();
